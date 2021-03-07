@@ -119,7 +119,7 @@ SingleQuote = "'"
     {LineBreak}             {System.out.println("<Enter>");}
     {Number}                {System.out.println("<Number>");}
     {QuotationMark}         {System.out.print("<String literal, "); yybegin(STRING_LITERAl);}
-    .             {}
+    .                       {System.out.println("Error, unrecognized character: " + yytext());}
 }
 
 <COMMENT> {
