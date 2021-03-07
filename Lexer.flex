@@ -8,7 +8,7 @@
 %state COMMENT
 %state STRING_LITERAl
 %{
-    String buffer = "";
+    Public String buffer = "";
 %}
 
 Letter = [a-zA-Z]
@@ -18,7 +18,7 @@ LineBreak = [\n|\r\n]
 Space = [" "]+
 QuotationMark = [\"]
 String = {QuotationMark} ({Letter}|{Digit})+ {QuotationMark}
-Number = {Digit}+
+Number = {Digit}+|{Digit}+"."+{Digit}+
 Integer = "Integer"
 Boolean = "Boolean"
 Double = "Double"
