@@ -1,10 +1,10 @@
 
 %%
+
+%unicode
 %class Lexer
 %line 
-%column
-%int 
-%unicode
+%column 
 %state COMMENT
 %state STRING_LITERAl
 %{
