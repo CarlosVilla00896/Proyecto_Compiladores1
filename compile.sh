@@ -1,1 +1,0 @@
-javac -classpath jflex-1.8.2.jar Main.java

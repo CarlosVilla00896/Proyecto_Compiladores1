@@ -1,0 +1,9 @@
+Module VBModule
+    Dim n As Integer
+Dim n As Integer
+    Sub Main();
+        Console.WriteLine("HelloWorld")
+    End Sub -9999
+
+        If hola Or <> === Then xD 
+End Module

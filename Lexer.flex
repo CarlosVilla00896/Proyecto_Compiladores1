@@ -1,20 +1,27 @@
 
 %%
 
-%unicode
 %class Lexer
+%unicode
 %line 
-%column 
+%column
+%int 
 %state COMMENT
 %state STRING_LITERAl
+
 %{
-    Public String buffer = "";
+    public String lexema = "";
+    public String cadena = "";
+
+    public void setColumn(){
+        yycolumn += yytext().length();
+    }
 %}
 
 Letter = [a-zA-Z]
 Digit = [0-9]
 Identifier = {Letter}({Letter}|{Digit}|_)* | _{Letter}({Letter}|{Digit}|_)*
-LineBreak = [\n|\r\n]
+LineBreak = [\n|\r|\r\n]
 Space = [" "]+
 QuotationMark = [\"]
 String = {QuotationMark} ({Letter}|{Digit})+ {QuotationMark}
@@ -55,7 +62,7 @@ ReadLine = "ReadLine"
 DivMult= ["/"|"*"]
 AddSub = ["+"|"-"]
 ConcatOperator = "&"
-RelationalOperators = [<>|<|>|>=|<=]
+RelationalOperators = ["<>"|"<"|">"|">="|"<="]
 EqualOperator = "="
 Point = "."
 LeftParenthesis = "("
@@ -68,7 +75,7 @@ SingleQuote = "'"
 
 %%
 
-<YYINITAL> {
+<YYINITIAL> {
     {SingleQuote}           {System.out.println("<Commentary>");yybegin(COMMENT);}
     {Boolean}               {System.out.println("<Boolean>");}
     {Integer}               {System.out.println("<Integer>");}
@@ -104,10 +111,10 @@ SingleQuote = "'"
     {WriteLine}             {System.out.println("<WriteLine>");}
     {ReadLine}              {System.out.println("<ReadLine>");}
     {Identifier}            {System.out.println("<Identifier, '" + yytext() + "'>");}
-    {DivMult}               {System.out.println("<Operator, " + yytext() + ">");}
-    {AddSub}                {System.out.println("<Operator, " + yytext() + ">");}
+    {DivMult}               {System.out.println("<Operator, '" + yytext() + "'>");}
+    {AddSub}                {System.out.println("<Operator, '" + yytext() + "'>");}
     {ConcatOperator}        {System.out.println("<Concat Operator>");}
-    {RelationalOperators}   {System.out.println("<Rlational Operator, " + yytext() + ">");}
+    {RelationalOperators}   {System.out.println("<Relational Operator, ' " + yytext() + " '>");}
     {EqualOperator}         {System.out.println("<Equal Operator>");}
     {Point}                 {System.out.println("<Point>");}
     {LeftParenthesis}       {System.out.println("<Left Parenthesis>");}
@@ -118,20 +125,21 @@ SingleQuote = "'"
     {RigthSquareBracket}    {System.out.println("<Right Square Bracket>");}
     {LineBreak}             {System.out.println("<Enter>");}
     {Number}                {System.out.println("<Number>");}
+    {Space}                 {}
     {QuotationMark}         {System.out.print("<String literal, "); yybegin(STRING_LITERAl);}
     .                       {System.out.println("Error, unrecognized character: " + yytext());}
 }
 
 <COMMENT> {
-    {LineBreak} {yybegin(YYINITAL());}
+    {LineBreak} {yybegin(YYINITIAL);}
     .           {}
 }
 
 <STRING_LITERAl> {
     {QuotationMark} {
-                        System.out.println(buffer + ">"); yybegin(STRING_LITERAl);
-                        buffer = "";
-                        yybegin(YYINITAL());
+                        System.out.println(cadena + ">"); yybegin(STRING_LITERAl);
+                        cadena = "";
+                        yybegin(YYINITIAL);
                     }
-    .               { buffer = buffer + yytext();}
+    .               { cadena = cadena + yytext();}
 }
